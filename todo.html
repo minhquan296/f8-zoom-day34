@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+		<style type="text/tailwindcss"></style>
+	</head>
+	<body>
+		<div id="root"></div>
+		<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+		<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+		<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+		<script type="text/babel">
+			function Todo() {
+				const [todo, setTodo] = React.useState("");
+				const [todos, setTodos] = React.useState([
+					{
+						id: 1,
+						title: "Di choi voi nguoi yeu",
+						isCompleted: true,
+					},
+					{
+						id: 2,
+						title: "Di hoc bai",
+						isCompleted: false,
+					},
+					{
+						id: 3,
+						title: "Di danh bia",
+						isCompleted: false,
+					},
+				]);
+
+				const handleAddTodo = () => {
+					if (!todo) return alert("Bạn chưa nhập gì mà!!!");
+
+					setTodos((preTodos) => [...preTodos, { id: Math.random(), title: todo, isCompleted: false }]);
+					setTodo("");
+				};
+
+				const handleDeleteTodo = (id) => {
+					setTodos((prevTodos) => {
+						return prevTodos.filter((todo) => todo.id !== id);
+					});
+				};
+
+				const checkIsCompleted = (id) => {
+					setTodos((prevTodos) => {
+						return prevTodos.map((todo) => {
+							if (todo.id === id) return { ...todo, isCompleted: !todo.isCompleted };
+							return todo;
+						});
+					});
+				};
+
+				const completedTodo = () => {
+					const completedTodo = todos.filter((todo) => todo.isCompleted);
+					return completedTodo.length;
+				};
+
+				const remainTodo = () => {
+					const remainTodo = todos.length - completedTodo();
+					return remainTodo;
+				};
+
+				return (
+					<div className="flex flex-col items-center justify-center h-[100vh]">
+						<div className="bg-white shadow-xl w-[400px] h-[350px] p-8 overflow-y-auto  rounded border-[3px] border-gray-300 ">
+							<h1 className="font-bold text-4xl">Todo App</h1>
+							<div className="flex gap-2 mt-4">
+								<input
+									type="text"
+									name=""
+									id=""
+									placeholder="Add your new todo"
+									className="border px-2 py-1 w-full"
+									value={todo}
+									onChange={(e) => setTodo(e.target.value)}
+								/>
+								<button className="bg-green-400 px-2 py-1 font-bold text-xl" onClick={handleAddTodo}>
+									Add
+								</button>
+							</div>
+							{todos.length ? (
+								<div className="mt-4 flex flex-col gap-3">
+									{todos.map((todo) => (
+										<div
+											key={todo.id}
+											className="flex items-center justify-between bg-gray-300 p-2 rounded "
+										>
+											<div
+												className={`${
+													todo.isCompleted && "line-through"
+												} flex items-center gap-1`}
+											>
+												<input
+													type="checkbox"
+													checked={todo.isCompleted}
+													onChange={() => checkIsCompleted(todo.id)}
+												/>
+												<p>{todo.title}</p>
+											</div>
+											<button
+												className="ml-3 font-bold bg-red-400 rounded px-2 py-1 cursor-pointer"
+												onClick={() => handleDeleteTodo(todo.id)}
+											>
+												X
+											</button>
+										</div>
+									))}
+								</div>
+							) : (
+								<p className="mt-[50px] text-sm text-center italic">
+									Chưa có task nào. Hãy thêm task đầu tiên!
+								</p>
+							)}
+						</div>
+						{
+							<p className="bg-orange-300 text-center mt-4 p-2">
+								<span className="font-bold">Tổng:</span> {todos.length},{" "}
+								<span className="font-bold">Hoàn thành: </span>
+								{completedTodo()}, <span className="font-bold">Còn lại: </span>
+								{remainTodo()}
+							</p>
+						}
+					</div>
+				);
+			}
+			const root = ReactDOM.createRoot(document.getElementById("root"));
+			root.render(<Todo />);
+		</script>
+	</body>
+</html>
