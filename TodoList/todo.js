@@ -79,7 +79,7 @@ function Todo() {
 				)}
 			</div>
 			{
-				<p className="bg-green-300 text-center mt-4 px-3 py-2 rounded">
+				<p className="bg-white shadow-md border-[2px] border-gray-300 text-center mt-4 px-3 py-2 rounded">
 					<span className="font-bold">Tổng:</span> {todos.length} task(s),{" "}
 					<span className="font-bold">Hoàn thành: </span>
 					{completedTodo()} task(s), <span className="font-bold">Còn lại: </span>
